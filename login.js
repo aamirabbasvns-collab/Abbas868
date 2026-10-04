@@ -49,7 +49,6 @@ $('eye').onclick = () => {
   $('eye').setAttribute('aria-pressed', String(hidden));
 };
 
-$('fp').onclick = (e) => { e.preventDefault(); show('Password reset is coming soon. Contact support for help.'); };
 
 async function post(path, body) {
   const r = await fetch(API_BASE + path, {
