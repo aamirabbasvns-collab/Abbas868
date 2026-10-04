@@ -2,7 +2,7 @@
 const API_BASE = 'https://backend-production-d71ae.up.railway.app';
 const SIGNUP_PATHS = ['/api/auth/signup', '/api/auth/register']; // first path that exists on your server is used
 const REDIRECT_AFTER_SIGNUP = 'dashboard.html'; // used when the server returns a token
-const LOGIN_PAGE = 'index.html';                // used when signup works but no token is returned
+const LOGIN_PAGE = 'login.html';                // used when signup works but no token is returned
 
 (() => {
   const c = document.getElementById('bg'), x = c.getContext('2d');
