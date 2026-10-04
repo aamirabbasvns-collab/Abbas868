@@ -21,6 +21,8 @@ h1{font-size:1.75rem;font-weight:700;letter-spacing:-.02em;text-align:center}
 .field input::placeholder{color:#6b7599}
 .field input:hover{border-color:rgba(255,255,255,.25)}
 .field input:focus{border-color:var(--b);box-shadow:0 0 0 4px rgba(34,211,238,.15),0 0 24px rgba(34,211,238,.18)}
+input::-ms-reveal,input::-ms-clear{display:none}
+input::-webkit-credentials-auto-fill-button{visibility:hidden;pointer-events:none;position:absolute;right:0}
 .eye{position:absolute;right:6px;top:7px;width:40px;height:40px;border:0;background:none;color:var(--mute);border-radius:10px;cursor:pointer;display:grid;place-items:center;transition:color .2s,background .2s}
 .eye:hover{color:var(--ink);background:rgba(255,255,255,.08)}
 .eye svg{width:20px;height:20px}
