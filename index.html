@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Create account</title><meta name="theme-color" content="#070914">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head><body>
+<canvas id="bg" aria-hidden="true"></canvas>
+<main class="wrap"><section class="card" aria-labelledby="title">
+  <div class="logo" aria-hidden="true"><span></span></div>
+  <h1 id="title">Create your account</h1>
+  <p class="sub">Join to start your AI experience</p>
+  <form id="f" novalidate>
+    <div class="field"><input id="name" type="text" placeholder="Full name" autocomplete="name" aria-label="Full name"></div>
+    <div class="field"><input id="email" type="email" placeholder="Email address" autocomplete="email" aria-label="Email address" required></div>
+    <div class="field"><input id="pw" type="password" placeholder="Password (8+ characters)" autocomplete="new-password" aria-label="Password" required>
+      <button class="eye" type="button" data-t="pw" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path class="slash hide" d="M3 3l18 18"/></svg></button></div>
+    <div class="meter" id="meter" data-s="0" aria-hidden="true"><i></i><i></i><i></i><i></i></div>
+    <p class="hint" id="hint">Use letters, numbers and a symbol for a stronger password.</p>
+    <div class="field"><input id="pw2" type="password" placeholder="Confirm password" autocomplete="new-password" aria-label="Confirm password" required>
+      <button class="eye" type="button" data-t="pw2" aria-label="Show password"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/><path class="slash hide" d="M3 3l18 18"/></svg></button></div>
+    <label class="terms"><input id="terms" type="checkbox"><span>I agree to the Terms of Service and Privacy Policy.</span></label>
+    <div class="msg" id="msg" role="alert" aria-live="polite"></div>
+    <button class="btn" id="go" type="submit"><span class="spin" aria-hidden="true"></span><span class="lbl">Create Account</span></button>
+  </form>
+    <p class="foot">Already have an account? <a href="login.html" style="font-weight:600;font-size:.9rem">Sign in</a></p>
+</section></main>
+<script src="script.js"></script>
+</body></html>
