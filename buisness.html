@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Bizora | Grow Your Business With a Powerful Online Presence</title>
+<meta name="description" content="Bizora creates modern, professional and reliable digital solutions that help businesses attract more customers and grow faster.">
+<meta name="theme-color" content="#0b1220">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#0b1220;--bg2:#0f192e;--card:rgba(255,255,255,.05);--ink:#f1f5ff;--mute:#9fb0d0;--line:rgba(255,255,255,.1);--a:#4f7cff;--b:#22d3ee;--ok:#4ade80}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:'Poppins',system-ui,-apple-system,sans-serif;background:var(--bg);color:var(--ink);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;z-index:-1;background:radial-gradient(60vmax 60vmax at 85% -10%,rgba(79,124,255,.22),transparent 60%),radial-gradient(50vmax 50vmax at -10% 40%,rgba(34,211,238,.12),transparent 60%)}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+img,svg{display:block}
+:focus-visible{outline:2px solid var(--b);outline-offset:3px;border-radius:8px}
+.wrap{max-width:1160px;margin:0 auto;padding:0 20px}
+section{padding:84px 0}
+.tag{display:inline-block;font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--b);margin-bottom:12px}
+h1{font-size:clamp(2.1rem,5.4vw,3.7rem);line-height:1.1;letter-spacing:-.03em;font-weight:800}
+h2{font-size:clamp(1.6rem,3.6vw,2.4rem);line-height:1.2;letter-spacing:-.02em;font-weight:700;margin-bottom:14px}
+h3{font-size:1.08rem;font-weight:600;margin-bottom:8px}
+p{color:var(--mute)}
+em{font-style:normal;background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.head{max-width:640px;margin-bottom:44px}
+.head.c{margin-inline:auto;text-align:center}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:48px;padding:0 26px;border:0;border-radius:14px;font:600 .92rem 'Poppins',sans-serif;color:#fff;cursor:pointer;background:linear-gradient(110deg,var(--a),#6a8dff,var(--b));background-size:200% 100%;box-shadow:0 10px 28px rgba(79,124,255,.35);transition:transform .2s,background-position .5s}
+.btn:hover{transform:translateY(-2px);background-position:100% 0}
+.btn.ghost{background:rgba(255,255,255,.06);border:1px solid var(--line);box-shadow:none}
+.btn.ghost:hover{background:rgba(255,255,255,.12)}
+.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:26px;transition:transform .3s,border-color .3s,box-shadow .3s}
+.card:hover{transform:translateY(-6px);border-color:rgba(79,124,255,.55);box-shadow:0 20px 50px rgba(0,0,0,.35)}
+.ico{width:48px;height:48px;border-radius:14px;display:grid;place-items:center;font-size:1.4rem;margin-bottom:16px;background:linear-gradient(135deg,rgba(79,124,255,.25),rgba(34,211,238,.18));border:1px solid var(--line)}
+.grid3{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:20px}
+
+/* header */
+.hd{position:sticky;top:0;z-index:50;background:rgba(11,18,32,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-bottom:1px solid var(--line)}
+.hd .wrap{display:flex;align-items:center;justify-content:space-between;height:68px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;font-size:1.3rem;letter-spacing:.04em}
+.brand i{width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,var(--a),var(--b));box-shadow:0 0 20px rgba(79,124,255,.6)}
+.nav{display:flex;align-items:center;gap:6px}
+.nav a{padding:8px 13px;border-radius:10px;font-size:.88rem;font-weight:500;color:var(--mute);transition:color .2s,background .2s}
+.nav a:hover,.nav a.on{color:var(--ink);background:rgba(255,255,255,.07)}
+.burger{display:none;width:44px;height:44px;border:0;background:none;color:var(--ink);cursor:pointer;border-radius:12px}
+.burger span,.burger span::before,.burger span::after{display:block;width:22px;height:2px;background:var(--ink);border-radius:2px;position:relative;margin:auto;transition:transform .3s,top .3s}
+.burger span::before,.burger span::after{content:"";position:absolute;left:0}
+.burger span::before{top:-7px}.burger span::after{top:7px}
+.burger[aria-expanded=true] span{background:transparent}
+.burger[aria-expanded=true] span::before{top:0;transform:rotate(45deg)}
+.burger[aria-expanded=true] span::after{top:0;transform:rotate(-45deg)}
+@media(max-width:860px){
+ .burger{display:block}
+ .nav{position:fixed;top:68px;left:0;right:0;flex-direction:column;align-items:stretch;padding:14px 20px 22px;background:#0d1627;border-bottom:1px solid var(--line);transform:translateY(-130%);transition:transform .35s;max-height:calc(100vh - 68px);overflow:auto}
+ .nav.open{transform:none}
+ .nav a{padding:14px}
+}
+
+/* hero */
+.hero{padding:96px 0 70px;text-align:center}
+.hero .wrap{max-width:860px}
+.hero p{font-size:1.05rem;margin:22px auto 32px;max-width:640px}
+.cta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.hero .badge{display:inline-flex;gap:8px;align-items:center;padding:7px 16px;border-radius:999px;background:rgba(255,255,255,.06);border:1px solid var(--line);font-size:.8rem;color:var(--mute);margin-bottom:24px}
+.hero .badge b{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 10px var(--ok)}
+
+/* about */
+.about{display:grid;gap:44px;align-items:center}
+@media(min-width:900px){.about{grid-template-columns:1.1fr .9fr}}
+.about p+p{margin-top:14px}
+.stats{display:grid;gap:14px}
+.stat{display:flex;align-items:center;gap:18px;padding:22px 24px}
+.stat b{font-size:2rem;font-weight:800;min-width:92px;background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat span{color:var(--mute);font-size:.92rem}
+.link{display:inline-flex;margin-top:22px;font-weight:600;color:var(--b);transition:gap .2s,transform .2s}
+.link:hover{transform:translateX(5px)}
+
+/* alt bg */
+.alt{background:linear-gradient(180deg,transparent,rgba(255,255,255,.025),transparent)}
+
+/* projects */
+.proj{padding:0;overflow:hidden}
+.proj .pv{height:150px;display:grid;place-items:center;font-size:3.2rem;background:linear-gradient(135deg,hsl(var(--h) 65% 22%),hsl(calc(var(--h) + 50) 65% 12%))}
+.proj .pb{padding:22px 24px 26px}
+
+/* numbers */
+.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:20px;text-align:center}
+.nums .card{padding:34px 20px}
+.nums b{display:block;font-size:2.6rem;font-weight:800;line-height:1.1;background:linear-gradient(90deg,var(--a),var(--b));-webkit-background-clip:text;background-clip:text;color:transparent}
+.nums span{color:var(--mute);font-size:.92rem}
+
+/* testimonials */
+.tm .q{color:var(--ink);font-size:.95rem;margin:16px 0 20px;line-height:1.7}
+.tm .stars{color:#fbbf24;letter-spacing:2px;font-size:.9rem}
+.who{display:flex;align-items:center;gap:12px}
+.who i{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-style:normal;font-weight:700;background:linear-gradient(135deg,var(--a),var(--b))}
+.who b{display:block;font-size:.95rem}.who small{color:var(--mute)}
+
+/* pricing */
+.price{display:flex;flex-direction:column;position:relative}
+.price.hot{border-color:rgba(79,124,255,.7);background:linear-gradient(160deg,rgba(79,124,255,.16),rgba(34,211,238,.06));box-shadow:0 20px 60px rgba(79,124,255,.18)}
+.price .pop{position:absolute;top:-13px;right:22px;padding:5px 14px;border-radius:999px;font-size:.72rem;font-weight:700;background:linear-gradient(90deg,var(--a),var(--b));color:#fff}
+.price .pl{font-size:.8rem;font-weight:700;letter-spacing:.14em;color:var(--b)}
+.price .amt{font-size:2.6rem;font-weight:800;margin:8px 0 6px}
+.price ul{margin:22px 0 28px;display:grid;gap:10px}
+.price li{color:var(--mute);font-size:.92rem;padding-left:26px;position:relative}
+.price li::before{content:"✓";position:absolute;left:0;color:var(--ok);font-weight:700}
+.price .btn{margin-top:auto}
+
+/* faq */
+.faq{max-width:780px;margin:0 auto;display:grid;gap:12px}
+.fq{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.fq button{width:100%;display:flex;justify-content:space-between;align-items:center;gap:16px;padding:20px 22px;border:0;background:none;color:var(--ink);font:600 .98rem 'Poppins',sans-serif;text-align:left;cursor:pointer}
+.fq button::after{content:"+";font-size:1.5rem;color:var(--b);transition:transform .3s;flex:none}
+.fq.open button::after{transform:rotate(45deg)}
+.fq .a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .35s}
+.fq.open .a{grid-template-rows:1fr}
+.fq .a div{overflow:hidden}
+.fq .a p{padding:0 22px 20px;font-size:.93rem}
+
+/* contact */
+.contact{display:grid;gap:40px;align-items:start}
+@media(min-width:900px){.contact{grid-template-columns:.9fr 1.1fr}}
+form{display:grid;gap:14px;padding:28px}
+.f2{display:grid;gap:14px}
+@media(min-width:560px){.f2{grid-template-columns:1fr 1fr}}
+label{display:grid;gap:6px;font-size:.82rem;font-weight:500;color:var(--mute)}
+input,select,textarea{width:100%;padding:14px 16px;border-radius:12px;border:1px solid var(--line);background:rgba(255,255,255,.05);color:var(--ink);font:inherit;font-size:.92rem;transition:border-color .2s,box-shadow .2s}
+select option{background:#101a30}
+textarea{min-height:130px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:0;border-color:var(--b);box-shadow:0 0 0 4px rgba(34,211,238,.14)}
+input.bad,textarea.bad{border-color:#f87171}
+#msg{min-height:1.2em;font-size:.88rem;color:var(--b)}
+#msg.err{color:#f87171}
+
+/* cta band */
+.band{text-align:center;padding:60px 28px;border-radius:28px;border:1px solid var(--line);background:linear-gradient(135deg,rgba(79,124,255,.25),rgba(34,211,238,.12))}
+.band p{max-width:560px;margin:0 auto 26px}
+
+/* footer */
+footer{margin-top:40px;border-top:1px solid var(--line);background:rgba(0,0,0,.25)}
+.fg{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:32px;padding:56px 0 30px}
+.fg h4{font-size:.78rem;letter-spacing:.12em;margin-bottom:14px;color:var(--ink)}
+.fg a{display:block;color:var(--mute);font-size:.92rem;padding:5px 0;transition:color .2s}
+.fg a:hover{color:var(--b)}
+.fg p{margin-top:12px;font-size:.92rem}
+.copy{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;padding:22px 0;border-top:1px solid var(--line);font-size:.85rem;color:var(--mute)}
+.copy div{display:flex;gap:18px}.copy a:hover{color:var(--b)}
+
+/* reveal + top */
+.rv{opacity:0;transform:translateY(28px);transition:opacity .7s,transform .7s}
+.rv.in{opacity:1;transform:none}
+#top{position:fixed;right:18px;bottom:18px;width:46px;height:46px;border:0;border-radius:14px;color:#fff;font-size:1.2rem;cursor:pointer;background:linear-gradient(135deg,var(--a),var(--b));box-shadow:0 10px 28px rgba(79,124,255,.4);opacity:0;pointer-events:none;transform:translateY(10px);transition:.3s;z-index:40}
+#top.show{opacity:1;pointer-events:auto;transform:none}
+@media(max-width:700px){section{padding:60px 0}.hero{padding-top:64px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}html{scroll-behavior:auto}}
+</style>
+</head>
+<body>
+
+<header class="hd">
+ <div class="wrap">
+  <a class="brand" href="#home"><i></i>BIZORA</a>
+  <nav class="nav" id="nav" aria-label="Main">
+   <a href="#home">Home</a><a href="#about">About</a><a href="#services">Services</a><a href="#portfolio">Portfolio</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="#contact">Contact</a>
+  </nav>
+  <button class="burger" id="burger" aria-label="Open menu" aria-expanded="false"><span></span></button>
+ </div>
+</header>
+
+<main>
+<section class="hero" id="home">
+ <div class="wrap">
+  <div class="badge"><b></b>Modern digital solutions for modern businesses</div>
+  <h1>Grow Your Business With a <em>Powerful Online Presence</em></h1>
+  <p>We create modern, professional and reliable digital solutions that help businesses attract more customers, build their brand and grow faster.</p>
+  <div class="cta"><a class="btn" href="#contact">Get Started</a><a class="btn ghost" href="#services">Explore Services</a></div>
+ </div>
+</section>
+
+<section id="about">
+ <div class="wrap about">
+  <div class="rv">
+   <span class="tag">About Us</span>
+   <h2>We Help Businesses Build Their <em>Digital Future</em></h2>
+   <p>At Bizora, we believe every business deserves a strong online presence. We provide modern digital solutions designed to help businesses connect with their customers and achieve their goals.</p>
+   <p>Our team focuses on clean design, powerful technology and a smooth user experience to create websites that look professional and work perfectly on every device.</p>
+   <a class="link" href="#services">Learn More →</a>
+  </div>
+  <div class="stats rv">
+   <div class="card stat"><b data-n="500" data-s="+">500+</b><span>Projects Completed</span></div>
+   <div class="card stat"><b data-n="250" data-s="+">250+</b><span>Happy Businesses</span></div>
+   <div class="card stat"><b data-n="98" data-s="%">98%</b><span>Client Satisfaction</span></div>
+  </div>
+ </div>
+</section>
+
+<section class="alt" id="services">
+ <div class="wrap">
+  <div class="head c rv"><span class="tag">Our Services</span><h2>Everything Your Business Needs to Grow</h2></div>
+  <div class="grid3">
+   <div class="card rv"><div class="ico">💻</div><h3>Web Development</h3><p>Modern, fast and responsive websites designed specifically for your business.</p></div>
+   <div class="card rv"><div class="ico">📣</div><h3>Digital Marketing</h3><p>Powerful digital marketing strategies to help your business reach more potential customers.</p></div>
+   <div class="card rv"><div class="ico">📈</div><h3>Business Consulting</h3><p>Smart and practical strategies to improve your business performance and growth.</p></div>
+   <div class="card rv"><div class="ico">🎨</div><h3>Brand Design</h3><p>Professional branding solutions that help your business create a strong identity.</p></div>
+   <div class="card rv"><div class="ico">🔍</div><h3>SEO Optimization</h3><p>Improve your search engine visibility and help more customers discover your business online.</p></div>
+   <div class="card rv"><div class="ico">🛟</div><h3>24/7 Support</h3><p>Reliable technical support to keep your digital business running smoothly.</p></div>
+  </div>
+ </div>
+</section>
+
+<section id="why">
+ <div class="wrap">
+  <div class="head c rv"><span class="tag">Why Choose Bizora?</span><h2>Designed For Businesses That Want To Grow</h2></div>
+  <div class="grid3">
+   <div class="card rv"><div class="ico">✨</div><h3>Professional Design</h3><p>Clean and modern designs that create a strong first impression.</p></div>
+   <div class="card rv"><div class="ico">📱</div><h3>Mobile Responsive</h3><p>Your website will look great on smartphones, tablets and computers.</p></div>
+   <div class="card rv"><div class="ico">⚡</div><h3>Fast Performance</h3><p>Optimized websites that provide a smooth and fast browsing experience.</p></div>
+   <div class="card rv"><div class="ico">🎯</div><h3>Customer Focused</h3><p>Every website is designed with your customers and business goals in mind.</p></div>
+   <div class="card rv"><div class="ico">🔒</div><h3>Secure Technology</h3><p>Modern development practices help keep your website safe and reliable.</p></div>
+   <div class="card rv"><div class="ico">🛠️</div><h3>Easy To Customize</h3><p>Change your logo, colors, content, images and services whenever your business grows.</p></div>
+  </div>
+ </div>
+</section>
+
+<section class="alt" id="portfolio">
+ <div class="wrap">
+  <div class="head c rv"><span class="tag">Our Work</span><h2>Recent Projects</h2></div>
+  <div class="grid3">
+   <article class="card proj rv" style="--h:220"><div class="pv">💼</div><div class="pb"><h3>Business Website</h3><p>A professional website designed for modern businesses.</p><a class="link" href="#contact">View Project →</a></div></article>
+   <article class="card proj rv" style="--h:160"><div class="pv">🛒</div><div class="pb"><h3>E-Commerce Store</h3><p>A clean online store designed to showcase products and increase sales.</p><a class="link" href="#contact">View Project →</a></div></article>
+   <article class="card proj rv" style="--h:20"><div class="pv">🍽️</div><div class="pb"><h3>Restaurant Website</h3><p>An attractive website for restaurants, cafes and food businesses.</p><a class="link" href="#contact">View Project →</a></div></article>
+   <article class="card proj rv" style="--h:280"><div class="pv">🚀</div><div class="pb"><h3>Startup Website</h3><p>A modern digital presence for growing startups and new companies.</p><a class="link" href="#contact">View Project →</a></div></article>
+   <article class="card proj rv" style="--h:320"><div class="pv">🏢</div><div class="pb"><h3>Agency Website</h3><p>A professional website for creative and digital agencies.</p><a class="link" href="#contact">View Project →</a></div></article>
+   <article class="card proj rv" style="--h:190"><div class="pv">🧑‍💻</div><div class="pb"><h3>Portfolio Website</h3><p>A personal portfolio designed to showcase skills, projects and achievements.</p><a class="link" href="#contact">View Project →</a></div></article>
+  </div>
+ </div>
+</section>
+
+<section id="numbers">
+ <div class="wrap">
+  <div class="head c rv"><span class="tag">Our Numbers</span><h2>Results That Speak For Us</h2></div>
+  <div class="nums">
+   <div class="card rv"><b data-n="500" data-s="+">500+</b><span>Projects Completed</span></div>
+   <div class="card rv"><b data-n="250" data-s="+">250+</b><span>Happy Businesses</span></div>
+   <div class="card rv"><b data-n="98" data-s="%">98%</b><span>Client Satisfaction</span></div>
+   <div class="card rv"><b>24/7</b><span>Customer Support</span></div>
+  </div>
+ </div>
+</section>
+
+<section class="alt" id="testimonials">
+ <div class="wrap">
+  <div class="head c rv"><span class="tag">Testimonials</span><h2>What Our Clients Say</h2></div>
+  <div class="grid3 tm">
+   <div class="card rv"><div class="stars">★★★★★</div><p class="q">"Bizora helped us create a professional online presence for our business. The website looks modern and works perfectly on mobile devices."</p><div class="who"><i>R</i><div><b>Rahul Sharma</b><small>Business Owner</small></div></div></div>
+   <div class="card rv"><div class="stars">★★★★★</div><p class="q">"The design was clean, professional and exactly what we needed. Our customers now find it much easier to learn about our services."</p><div class="who"><i>P</i><div><b>Priya Verma</b><small>Startup Founder</small></div></div></div>
+   <div class="card rv"><div class="stars">★★★★★</div><p class="q">"Excellent service and great attention to detail. The website looks premium and performs very well."</p><div class="who"><i>A</i><div><b>Arjun Mehta</b><small>Agency Owner</small></div></div></div>
+  </div>
+ </div>
+</section>
+
+<section id="pricing">
+ <div class="wrap">
+  <div class="head c rv"><span class="tag">Pricing</span><h2>Choose The Right Plan For Your Business</h2></div>
+  <div class="grid3">
+   <div class="card price rv"><span class="pl">STARTER</span><div class="amt">₹4,999</div><p>Perfect for small businesses and individuals.</p>
+    <ul><li>1 Page Website</li><li>Responsive Design</li><li>Contact Section</li><li>Basic Animations</li><li>Social Media Links</li><li>Basic Support</li></ul>
+    <a class="btn ghost" href="#contact" data-plan="Starter">Get Started →</a></div>
+   <div class="card price hot rv"><span class="pop">Most Popular</span><span class="pl">PROFESSIONAL</span><div class="amt">₹9,999</div><p>Perfect for growing businesses.</p>
+    <ul><li>Up to 5 Pages</li><li>Premium Design</li><li>Smooth Animations</li><li>Contact Form</li><li>SEO Setup</li><li>Social Media Integration</li><li>Mobile Responsive</li><li>Support</li></ul>
+    <a class="btn" href="#contact" data-plan="Professional">Choose Professional →</a></div>
+   <div class="card price rv"><span class="pl">BUSINESS</span><div class="amt">₹19,999</div><p>A complete solution for established businesses.</p>
+    <ul><li>10+ Pages</li><li>Advanced UI Design</li><li>Custom Features</li><li>SEO Optimization</li><li>Contact System</li><li>Advanced Animations</li><li>Performance Optimization</li><li>Priority Support</li></ul>
+    <a class="btn ghost" href="#contact" data-plan="Business">Choose Business →</a></div>
+  </div>
+ </div>
+</section>
+
+<section class="alt" id="faq">
+ <div class="wrap">
+  <div class="head c rv"><span class="tag">FAQ</span><h2>Frequently Asked Questions</h2></div>
+  <div class="faq rv">
+   <div class="fq"><button aria-expanded="false">Can you customize the website for my business?</button><div class="a"><div><p>Yes. The logo, colors, images, text, services, pricing and other sections can be completely customized according to your business.</p></div></div></div>
+   <div class="fq"><button aria-expanded="false">Will the website work on mobile phones?</button><div class="a"><div><p>Yes. The website is designed to be responsive and works on smartphones, tablets and desktop computers.</p></div></div></div>
+   <div class="fq"><button aria-expanded="false">Can I add my own logo and images?</button><div class="a"><div><p>Yes. Your own logo, business images, product photos and other content can be added easily.</p></div></div></div>
+   <div class="fq"><button aria-expanded="false">Can I add more pages later?</button><div class="a"><div><p>Yes. Additional pages and features can be added whenever your business needs them.</p></div></div></div>
+   <div class="fq"><button aria-expanded="false">How long does it take to build a website?</button><div class="a"><div><p>The delivery time depends on the number of pages and features required for your project.</p></div></div></div>
+   <div class="fq"><button aria-expanded="false">Do you provide support?</button><div class="a"><div><p>Yes. Support and maintenance options are available according to the selected package.</p></div></div></div>
+  </div>
+ </div>
+</section>
+
+<section id="contact">
+ <div class="wrap contact">
+  <div class="rv">
+   <span class="tag">Contact Us</span>
+   <h2>Let's Build Something <em>Great Together</em></h2>
+   <p>Have a business idea or need a professional website?</p>
+   <p style="margin-top:12px">Contact us today and let's create a digital presence that helps your business grow.</p>
+  </div>
+  <form class="card rv" id="cf" novalidate>
+   <div class="f2">
+    <label>Your Name<input name="name" required autocomplete="name" placeholder="Your Name"></label>
+    <label>Your Email<input name="email" type="email" required autocomplete="email" placeholder="Your Email"></label>
+   </div>
+   <div class="f2">
+    <label>Your Phone<input name="phone" type="tel" autocomplete="tel" placeholder="Your Phone"></label>
+    <label>Business Type<select name="type"><option value="">Business Type</option><option>Business</option><option>E-Commerce</option><option>Restaurant</option><option>Startup</option><option>Agency</option><option>Portfolio</option><option>Other</option></select></label>
+   </div>
+   <label>Your Project<textarea name="project" required placeholder="Tell us about your project..."></textarea></label>
+   <button class="btn" type="submit">Send Message</button>
+   <div id="msg" role="status" aria-live="polite"></div>
+  </form>
+ </div>
+</section>
+
+<section style="padding-top:20px">
+ <div class="wrap">
+  <div class="band rv">
+   <span class="tag">Ready To Grow Your Business?</span>
+   <h2>Your Business Deserves A Better Online Presence</h2>
+   <p>Create a professional website that builds trust, attracts customers and helps your business grow.</p>
+   <a class="btn" href="#contact">Start Your Project →</a>
+  </div>
+ </div>
+</section>
+</main>
+
+<footer>
+ <div class="wrap">
+  <div class="fg">
+   <div><a class="brand" href="#home"><i></i>BIZORA</a><p>Modern digital solutions for modern businesses.</p></div>
+   <div><h4>QUICK LINKS</h4><a href="#home">Home</a><a href="#about">About</a><a href="#services">Services</a><a href="#portfolio">Portfolio</a><a href="#pricing">Pricing</a><a href="#faq">FAQ</a><a href="#contact">Contact</a></div>
+   <div><h4>FOLLOW US</h4><a href="#" rel="noopener">Instagram</a><a href="#" rel="noopener">Facebook</a><a href="#" rel="noopener">LinkedIn</a><a href="#" rel="noopener">YouTube</a></div>
+  </div>
+  <div class="copy"><span>© 2026 Bizora. All Rights Reserved.</span><div><a href="#">Privacy Policy</a><a href="#">Terms &amp; Conditions</a></div></div>
+ </div>
+</footer>
+
+<button id="top" aria-label="Back to top">↑</button>
+
+<script>
+(function(){
+ var $=function(s,r){return (r||document).querySelector(s)},$$=function(s,r){return [].slice.call((r||document).querySelectorAll(s))};
+
+ // mobile menu
+ var nav=$('#nav'),bg=$('#burger');
+ function menu(o){nav.classList.toggle('open',o);bg.setAttribute('aria-expanded',o);bg.setAttribute('aria-label',o?'Close menu':'Open menu')}
+ bg.onclick=function(){menu(!nav.classList.contains('open'))};
+ $$('a',nav).forEach(function(a){a.onclick=function(){menu(false)}});
+ addEventListener('keydown',function(e){if(e.key==='Escape')menu(false)});
+
+ // reveal on scroll (falls back to visible if IntersectionObserver missing)
+ if('IntersectionObserver' in window){
+  var io=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){x.target.classList.add('in');io.unobserve(x.target)}})},{threshold:.12});
+  $$('.rv').forEach(function(el){io.observe(el)});
+ }else{$$('.rv').forEach(function(el){el.classList.add('in')})}
+
+ // count-up numbers
+ function count(el){
+  var n=+el.dataset.n,s=el.dataset.s||'',t0=null,d=1400;
+  function f(t){t0=t0||t;var p=Math.min((t-t0)/d,1);el.textContent=Math.round(n*(1-Math.pow(1-p,3)))+s;if(p<1)requestAnimationFrame(f)}
+  requestAnimationFrame(f);
+ }
+ if('IntersectionObserver' in window){
+  var io2=new IntersectionObserver(function(es){es.forEach(function(x){if(x.isIntersecting){count(x.target);io2.unobserve(x.target)}})},{threshold:.6});
+  $$('[data-n]').forEach(function(el){io2.observe(el)});
+ }
+
+ // active nav link
+ var secs=$$('main section[id]'),links=$$('a',nav);
+ function spy(){
+  var y=scrollY+120,cur='home';
+  secs.forEach(function(s){if(s.offsetTop<=y)cur=s.id});
+  links.forEach(function(a){a.classList.toggle('on',a.getAttribute('href')==='#'+cur)});
+  $('#top').classList.toggle('show',scrollY>600);
+ }
+ addEventListener('scroll',spy,{passive:true});spy();
+ $('#top').onclick=function(){scrollTo({top:0,behavior:'smooth'})};
+
+ // FAQ accordion
+ $$('.fq button').forEach(function(b){b.onclick=function(){
+  var item=b.parentNode,open=!item.classList.contains('open');
+  $$('.fq').forEach(function(x){x.classList.remove('open');$('button',x).setAttribute('aria-expanded','false')});
+  if(open){item.classList.add('open');b.setAttribute('aria-expanded','true')}
+ }});
+
+ // pricing buttons pre-fill the project box
+ $$('[data-plan]').forEach(function(a){a.addEventListener('click',function(){
+  var t=$('#cf textarea');if(!t.value)t.value='I am interested in the '+a.dataset.plan+' plan. ';
+ })});
+
+ // contact form (front-end only: wire to your backend / Formspree / EmailJS later)
+ var form=$('#cf'),msg=$('#msg');
+ form.addEventListener('submit',function(e){
+  e.preventDefault();
+  var ok=true;
+  $$('[required]',form).forEach(function(i){
+   var bad=!i.value.trim()||(i.type==='email'&&!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(i.value));
+   i.classList.toggle('bad',bad);if(bad)ok=false;
+  });
+  msg.className=ok?'':'err';
+  if(!ok){msg.textContent='Please fill in your name, a valid email and your project details.';return}
+  msg.textContent='Thank you! Your message has been received. We will get back to you soon.';
+  form.reset();
+ });
+})();
+</script>
+</body>
+</html>
