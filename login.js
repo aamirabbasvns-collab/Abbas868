@@ -1,7 +1,7 @@
 /* ===== BACKEND CONFIG (Abbas868 backend on Railway) ===== */
 const API_BASE = 'https://backend-production-d71ae.up.railway.app';
 const LOGIN_PATHS = ['/api/auth/login', '/api/auth/signin']; // first path that exists on your server is used
-const REDIRECT_AFTER_LOGIN = 'dashboard.html';              // page opened after successful login
+const REDIRECT_AFTER_LOGIN = 'home.html';              // page opened after successful login
 
 (() => {
   const c = document.getElementById('bg'), x = c.getContext('2d');
