@@ -1,5 +1,8 @@
-/* Set your Railway URL if the frontend is hosted separately, e.g. 'https://your-app.up.railway.app' */
-const API_BASE = 'backend-production-d71ae.up.railway.app';
+/* ===== BACKEND CONFIG (Abbas868 backend on Railway) ===== */
+const API_BASE = 'https://backend-production-d71ae.up.railway.app';
+const SIGNUP_PATHS = ['/api/auth/signup', '/api/auth/register']; // first path that exists on your server is used
+const REDIRECT_AFTER_SIGNUP = 'dashboard.html'; // used when the server returns a token
+const LOGIN_PAGE = 'index.html';                // used when signup works but no token is returned
 
 (() => {
   const c = document.getElementById('bg'), x = c.getContext('2d');
@@ -35,11 +38,15 @@ function show(text) {
 }
 const clear = () => msg.classList.remove('show');
 
-document.querySelectorAll('.eye').forEach((b) => b.onclick = () => {
-  const i = $(b.dataset.t), hidden = i.type === 'password';
-  i.type = hidden ? 'text' : 'password';
-  b.querySelector('.slash').classList.toggle('hide', !hidden);
-  b.setAttribute('aria-label', hidden ? 'Hide password' : 'Show password');
+document.querySelectorAll('.eye').forEach((b) => {
+  b.addEventListener('pointerdown', (e) => e.preventDefault()); // keep keyboard/focus on the input
+  b.onclick = () => {
+    const i = $(b.dataset.t), hidden = i.type === 'password';
+    i.type = hidden ? 'text' : 'password';
+    b.querySelector('.slash').classList.toggle('hide', !hidden);
+    b.setAttribute('aria-label', hidden ? 'Hide password' : 'Show password');
+    b.setAttribute('aria-pressed', String(hidden));
+  };
 });
 
 pw.addEventListener('input', () => {
@@ -55,32 +62,44 @@ pw.addEventListener('input', () => {
     : ['Too weak', 'Weak: add more characters', 'Fair: add numbers or a symbol', 'Good', 'Strong'][s];
 });
 
-document.querySelectorAll('.sbtn').forEach((b) => b.onclick = async () => {
-  clear();
-  const r = await fetch(API_BASE + '/api/auth/' + b.dataset.p, { credentials: 'include' });
-  if (r.redirected) return (location.href = r.url);
+document.querySelectorAll('.sbtn').forEach((b) => b.onclick = () =>
+  show('Google and Facebook sign-up are coming soon. Please use email for now.'));
+
+async function post(path, body) {
+  const r = await fetch(API_BASE + path, {
+    method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
+  });
   const d = await r.json().catch(() => ({}));
-  show(d.error || 'Social sign-up is unavailable right now.');
-});
+  return { r, d };
+}
 
 $('f').addEventListener('submit', async (e) => {
   e.preventDefault(); clear();
-  const email = $('email').value.trim(), password = pw.value;
-  if (!$('name').value.trim()) return show('Enter your full name.');
+  const name = $('name').value.trim(), email = $('email').value.trim(), password = pw.value;
+  if (!name) return show('Enter your full name.');
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) return show('Enter a valid email address.');
   if (password.length < 8) return show('Use at least 8 characters for your password.');
   if (password !== pw2.value) return show('Passwords do not match.');
   if (!$('terms').checked) return show('Please accept the Terms and Privacy Policy to continue.');
   go.disabled = true; go.classList.add('load'); label('Creating account…');
   try {
-    const r = await fetch(API_BASE + '/api/auth/signup', {
-      method: 'POST', credentials: 'include', headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name: $('name').value.trim(), email, password }),
-    });
-    const d = await r.json().catch(() => ({}));
-    if (!r.ok) throw new Error(d.error || 'Could not create your account. Please try again.');
+    // extra aliases (fullName/username) are harmless; the backend ignores fields it does not use
+    const body = { name, fullName: name, username: name, email, password, confirmPassword: pw2.value };
+    let res = null;
+    for (const p of SIGNUP_PATHS) {
+      res = await post(p, body);
+      if (res.r.status !== 404) break; // route exists
+    }
+    const { r, d } = res;
+    if (r.status === 404) throw new Error('Signup route not found on the server. Check SIGNUP_PATHS in signup.js.');
+    if (!r.ok || d.success === false) throw new Error(d.message || d.error || 'Could not create your account. Please try again.');
+
+    const token = d.token || d.accessToken || (d.data && d.data.token);
+    const user = d.user || (d.data && d.data.user) || null;
+    if (token) { localStorage.setItem('token', token); if (user) localStorage.setItem('user', JSON.stringify(user)); }
+
     go.classList.remove('load'); go.classList.add('ok'); label('Account created ✓');
-    setTimeout(() => (location.href = API_BASE + '/dashboard'), 700);
+    setTimeout(() => (location.href = token ? REDIRECT_AFTER_SIGNUP : LOGIN_PAGE), 800);
   } catch (err) {
     show(err.message === 'Failed to fetch' ? 'Cannot reach the server. Check your connection.' : err.message);
     go.disabled = false; go.classList.remove('load'); label('Create Account');
