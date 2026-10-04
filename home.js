@@ -9,7 +9,7 @@ const W = [
   { id: 'nextgen', n: 'NextGen', c: 'Education', tags: 'education learning', d: 'Modern education website for courses, instructors and enrolments.', p: 1499, o: 0, r: 4.7, v: 241, e: '🎓', h: 200, demo: 'https://example.com/nextgen', f: ['Course catalog', 'Instructor profiles', 'Enrol call-to-action', 'Testimonials'], pg: ['Home', 'Courses', 'Instructors', 'Contact'] },
   { id: 'mytube', n: 'MyTube', c: 'Video Platform', tags: 'video platform', d: 'Video platform UI with browse grid, player page and categories.', p: 1299, o: 1799, r: 4.6, v: 198, e: '🎬', h: 350, demo: 'https://example.com/mytube', f: ['Video grid', 'Player page', 'Category filters', 'Search'], pg: ['Home', 'Watch', 'Categories', 'Library'] },
   { id: 'abbas-portfolio', n: 'Abbas Portfolio', c: 'Portfolio', tags: 'portfolio personal', d: 'Clean personal portfolio to showcase projects, skills and contact info.', p: 799, o: 0, r: 4.9, v: 356, e: '🧑‍💻', h: 160, demo: 'https://example.com/abbas-portfolio', f: ['Project gallery', 'Skills section', 'About me', 'Contact links'], pg: ['Home', 'Projects', 'About', 'Contact'] },
-  { id: 'modern-business', n: 'Modern Business', c: 'Business', tags: 'business company agency', d: 'Professional business website with services, team and enquiry form.', p: 1199, o: 1599, r: 4.7, v: 274, e: '💼', h: 30, demo: 'https://example.com/modern-business', f: ['Services section', 'Team cards', 'Client logos', 'Enquiry form'], pg: ['Home', 'Services', 'About', 'Contact'] },
+  { id: 'modern-business', n: 'Modern Business', c: 'Business', tags: 'business company agency', d: 'Professional business website with services, team and enquiry form.', p: 1199, o: 1599, r: 4.7, v: 274, e: '💼', h: 30, demo: 'buisness.html', f: ['Services section', 'Team cards', 'Client logos', 'Enquiry form'], pg: ['Home', 'Services', 'About', 'Contact'] },
   { id: 'language-learning', n: 'Language Learning', c: 'Education', tags: 'education language learning', d: 'Interactive language learning site with lessons and progress sections.', p: 1499, o: 0, r: 4.6, v: 167, e: '🗣️', h: 300, demo: 'https://example.com/language-learning', f: ['Lesson cards', 'Progress tracker', 'Level selector', 'Pricing'], pg: ['Home', 'Lessons', 'Pricing', 'Contact'] },
   { id: 'ai-learning-platform', n: 'AI Learning Platform', c: 'AI / Education', tags: 'ai education learning dashboard', d: 'AI powered learning platform with dashboard-style interface.', p: 1999, o: 2499, r: 4.9, v: 289, e: '🧠', h: 240, demo: 'https://example.com/ai-learning-platform', f: ['Dashboard UI', 'Course modules', 'AI tutor section', 'Progress charts'], pg: ['Home', 'Dashboard', 'Courses', 'Contact'] },
 ];
@@ -172,7 +172,7 @@ function about() {
 }
 function contact() {
   $('#app').innerHTML = `<h1>Contact <em>us</em></h1><p class="lead">Questions about a website, a purchase or customization? Email us and we will reply as soon as we can.</p>
-  <div class="fc"><h3>Email</h3><p><a href="mailto:hello@abbas868.com">hello@abbas868.com</a> (replace with your real address)</p></div>`;
+  <div class="fc"><h3>Email</h3><p><a href="mailto:aamirabbas0078.com">aamirabbas0078.com</a> (replace with your real address)</p></div>`;
 }
 
 /* Single-page router: #/  #/demos  #/site/<id>  #/purchases  #/about  #/contact */
