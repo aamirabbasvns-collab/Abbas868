@@ -62,9 +62,6 @@ pw.addEventListener('input', () => {
     : ['Too weak', 'Weak: add more characters', 'Fair: add numbers or a symbol', 'Good', 'Strong'][s];
 });
 
-document.querySelectorAll('.sbtn').forEach((b) => b.onclick = () =>
-  show('Google and Facebook sign-up are coming soon. Please use email for now.'));
-
 async function post(path, body) {
   const r = await fetch(API_BASE + path, {
     method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body),
