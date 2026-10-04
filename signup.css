@@ -55,3 +55,14 @@ a:focus-visible,button:focus-visible{outline:2px solid var(--b);outline-offset:3
 @media(min-width:768px){.card{padding:44px 40px 32px}}
 @media(max-height:700px){.wrap{place-items:start center}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+
+/* signup extras */
+.meter{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin:-4px 0 6px}
+.meter i{height:4px;border-radius:4px;background:rgba(255,255,255,.12);transition:background .3s}
+.meter[data-s="1"] i:nth-child(1){background:#ff8a9b}
+.meter[data-s="2"] i:nth-child(-n+2){background:#fbbf24}
+.meter[data-s="3"] i:nth-child(-n+3){background:#22d3ee}
+.meter[data-s="4"] i{background:#4ade80}
+.hint{font-size:.78rem;color:var(--mute);margin:0 0 14px;min-height:1.1em}
+.terms{display:flex;gap:10px;align-items:flex-start;margin:4px 0 18px;font-size:.85rem;color:var(--mute);line-height:1.45;cursor:pointer}
+.terms input{width:18px;height:18px;margin-top:1px;accent-color:#7c5cff;flex:none;cursor:pointer}
