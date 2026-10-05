@@ -60,3 +60,9 @@ footer{margin-top:80px;border-top:1px solid var(--line);background:rgba(0,0,0,.2
 .empty{grid-column:1/-1;text-align:center;color:var(--mute);padding:40px}
 @media(max-width:700px){.search{order:3;flex-basis:100%;max-width:none}.hd{flex-wrap:wrap;gap:10px}.grid{grid-template-columns:1fr}.tools small{margin:0}}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}.rv{opacity:1;transform:none}}
+/* Add this at the END of home.css */
+.sold-tag{position:absolute;top:14px;right:-34px;transform:rotate(35deg);width:130px;text-align:center;padding:5px 0;background:#ef4444;color:#fff;font-size:.72rem;font-weight:800;letter-spacing:.14em;box-shadow:0 6px 18px rgba(239,68,68,.45);z-index:2}
+.shot{position:relative}
+.card.sold .shot{filter:grayscale(.6);opacity:.75}
+.card.sold h3,.card.sold p{opacity:.7}
+.btn:disabled.ghost{pointer-events:none}
