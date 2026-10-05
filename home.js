@@ -1,9 +1,8 @@
-/* ===== CONFIG ===== */
+
 const API = 'https://backend-production-d71ae.up.railway.app';
 const LOGIN = 'login.html';
 let PAGE = 'home';
-// Websites for sale. Replace each `demo` URL with your real live demo. Prices here are for DISPLAY only:
-// the backend (data/products.js) holds the real price and is the only thing used for payment.
+
 const W = [
   { id: 'ai-machine', n: 'AI Machine', c: 'AI / Technology', tags: 'ai technology', d: 'Futuristic AI product website with animated hero and feature sections.', p: 999, o: 1499, r: 4.8, v: 312, e: '🤖', h: 260, demo: 'https://example.com/ai-machine', f: ['Animated hero', 'Feature grid', 'Pricing section', 'Contact form'], pg: ['Home', 'Features', 'Pricing', 'Contact'] },
   { id: 'nextgen', n: 'NextGen', c: 'Education', tags: 'education learning', d: 'Modern education website for courses, instructors and enrolments.', p: 1499, o: 0, r: 4.7, v: 241, e: '🎓', h: 200, demo: 'https://example.com/nextgen', f: ['Course catalog', 'Instructor profiles', 'Enrol call-to-action', 'Testimonials'], pg: ['Home', 'Courses', 'Instructors', 'Contact'] },
@@ -167,7 +166,7 @@ function reveal() {
   document.querySelectorAll('.rv:not(.in)').forEach((el) => io.observe(el));
 }
 function about() {
-  $('#app').innerHTML = `<h1>About <em>Abbas868</em></h1><p class="lead">Abbas868 provides professionally designed, ready-to-use websites and templates for developers, businesses, students and creators.</p>
+  $('#app').innerHTML = `<h1>About <em>NGI web</em></h1><p class="lead">Abbas868 provides professionally designed, ready-to-use websites and templates for developers, businesses, students and creators.</p>
   <div class="g"><div class="fc"><h3>🎯 Mission</h3><p>Make launching a professional website fast, affordable and simple.</p></div><div class="fc"><h3>📦 What we provide</h3><p>Complete websites and templates with source code, ready to customize.</p></div><div class="fc"><h3>⚙️ Technology</h3><p>Clean, responsive HTML, CSS and JavaScript that works on every device.</p></div><div class="fc"><h3>💬 Support</h3><p>Help with setup and questions after you buy.</p></div><div class="fc"><h3>🔒 Secure purchasing</h3><p>Payments are handled and verified by our backend. We never see your card details.</p></div></div>`;
 }
 function contact() {
