@@ -1,4 +1,4 @@
-
+/* Needs api.js (CONFIG, $, esc, api, logout, getUser, authReady) loaded first */
 let pollTimer = null;
 logoutHooks.push(() => clearInterval(pollTimer));
 
@@ -33,16 +33,17 @@ function renderProfile() {
   $('#pf').innerHTML = `<h3>${esc(u.name || 'User')}</h3><p>${esc(u.email || '')}</p>`;
 }
 
-/* ===== NOTIFICATIONS (real, from backend) ===== */
+/* ===== NOTIFICATIONS ===== */
 let notes = [], known = null;
 const seen = new Set(JSON.parse(localStorage.getItem('seenNotes') || '[]'));
 const canNotify = () => 'Notification' in window;
-const nid = (n) => String(n.id ?? n._id ?? n.createdAt);
+const nid = (n) => String(n._id ?? n.id ?? n.createdAt);
+const isNew = (n) => !n.read && !seen.has(nid(n));
 function updateBadge() {
-  const c = notes.filter((n) => !seen.has(nid(n))).length;
+  const c = notes.filter(isNew).length;
   $('#badge').hidden = !c; $('#badge').textContent = c > 9 ? '9+' : c;
 }
-function popup(n) { // browser notification, only if the user allowed it
+function popup(n) {
   if (canNotify() && Notification.permission === 'granted') {
     try { new Notification(n.title || 'Nexora', { body: n.message || n.body || '' }); } catch { /* ignore */ }
   }
@@ -51,7 +52,7 @@ async function loadNotes() {
   try {
     const d = await api(CONFIG.EP.notifications);
     notes = d.notifications || [];
-    if (known) notes.filter((n) => !known.has(nid(n))).forEach(popup); // only genuinely new ones
+    if (known) notes.filter((n) => !known.has(nid(n))).forEach(popup);
     known = new Set(notes.map(nid));
     updateBadge();
     if (!$('#v-notifications').hidden) drawNotes();
@@ -59,7 +60,7 @@ async function loadNotes() {
 }
 const ICONS = { purchase: '🛍️', account: '👤', message: '💬', system: '⚙️', update: '📢' };
 function drawNotes() {
-  $('#nl').innerHTML = notes.length ? notes.map((n) => `<div class="n${seen.has(nid(n)) ? '' : ' new'}"><span class="ni">${ICONS[n.type] || '🔔'}</span><div><h4>${esc(n.title || 'Notification')}</h4><p>${esc(n.message || n.body || '')}</p>${n.createdAt ? `<small>${esc(new Date(n.createdAt).toLocaleString('en-IN'))}</small>` : ''}</div></div>`).join('')
+  $('#nl').innerHTML = notes.length ? notes.map((n) => `<div class="n${isNew(n) ? ' new' : ''}"><span class="ni">${ICONS[n.type] || '🔔'}</span><div><h4>${esc(n.title || 'Notification')}</h4><p>${esc(n.message || n.body || '')}</p>${n.createdAt ? `<small>${esc(new Date(n.createdAt).toLocaleString('en-IN'))}</small>` : ''}</div></div>`).join('')
     : '<p class="empty">No notifications yet.</p>';
 }
 async function openNotes() {
@@ -69,6 +70,8 @@ async function openNotes() {
   notes.forEach((n) => seen.add(nid(n)));
   localStorage.setItem('seenNotes', JSON.stringify([...seen].slice(-300)));
   updateBadge();
+  /* mark read on server too (best effort) */
+  api('/api/notifications/read-all', { method: 'PATCH' }).catch(() => {});
 }
 async function askPermission() {
   if (!canNotify()) return;
@@ -78,7 +81,7 @@ async function askPermission() {
 
 /* ===== SETTINGS ===== */
 const say = (el, t, bad) => { el.textContent = t || ''; el.className = 'msg' + (t ? (bad ? ' bad' : ' good') : ''); };
-async function busy(form, fn, out) { // disable the button while a request runs, show errors
+async function busy(form, fn, out) {
   const b = form.querySelector('button[type=submit]'); b.disabled = true; say(out, '');
   try { await fn(); } catch (e) { say(out, e.message, true); }
   b.disabled = false;
@@ -86,7 +89,6 @@ async function busy(form, fn, out) { // disable the button while a request runs,
 
 function renderSettings() {
   const u = getUser();
-  $('#newName').value = u.name || ''; say($('#nmsg'), '');
   pwReset(u.email || '');
   const s = !canNotify() ? 'Your browser does not support notifications.'
     : Notification.permission === 'granted' ? 'Enabled ✓ You will get a browser alert for new notifications.'
@@ -96,22 +98,9 @@ function renderSettings() {
   $('#ne').hidden = !(canNotify() && Notification.permission === 'default');
 }
 
-/* change name */
-function initName() {
-  $('#nf').onsubmit = (e) => {
-    e.preventDefault();
-    const name = $('#newName').value.trim();
-    busy($('#nf'), async () => {
-      if (name.length < 2) throw new Error('Please enter at least 2 characters.');
-      await api(CONFIG.EP.changeName, { method: 'POST', body: JSON.stringify({ name }) });
-      localStorage.setItem('user', JSON.stringify({ ...getUser(), name }));
-      applyUser(); say($('#nmsg'), 'Name updated successfully ✓');
-    }, $('#nmsg'));
-  };
-}
-
-/* change password: email -> send OTP -> enter OTP -> new password -> success */
-const pw = { email: '', otp: '', token: '' };
+/* change password: email -> send OTP -> (OTP + new password) -> success
+   Backend note: /otp/verify deletes the OTP, so the OTP is checked by /auth/reset-password itself. */
+const pw = { email: '' };
 let cd = null;
 function pwStep(n) {
   document.querySelectorAll('#pwc .step').forEach((s) => (s.hidden = s.dataset.s != n));
@@ -119,7 +108,7 @@ function pwStep(n) {
   say($('#pwm'), '');
 }
 function pwReset(email) {
-  clearInterval(cd); pw.email = pw.otp = pw.token = '';
+  clearInterval(cd); pw.email = '';
   ['#po', '#np', '#cp'].forEach((s) => ($(s).value = ''));
   $('#pe').value = email; pwStep(1);
 }
@@ -129,7 +118,7 @@ function cooldown() {
     s--; if (s <= 0) { clearInterval(cd); b.disabled = false; b.textContent = 'Resend OTP'; } else b.textContent = `Resend in ${s}s`;
   }, 1000);
 }
-const sendOtp = (email) => api(CONFIG.EP.sendOtp, { method: 'POST', body: JSON.stringify({ email }) });
+const sendOtp = (email) => api(CONFIG.EP.sendOtp, { method: 'POST', body: JSON.stringify({ email, purpose: 'forgot-password' }) });
 
 function initPassword() {
   const out = $('#pwm');
@@ -149,30 +138,23 @@ function initPassword() {
   $('#pw2').onsubmit = (e) => {
     e.preventDefault();
     busy($('#pw2'), async () => {
-      const otp = $('#po').value.trim();
-      if (!/^\d{4,8}$/.test(otp)) throw new Error('Please enter the OTP from your email.');
-      const d = await api(CONFIG.EP.verifyOtp, { method: 'POST', body: JSON.stringify({ email: pw.email, otp }) });
-      pw.otp = otp; pw.token = d.resetToken || ''; clearInterval(cd); pwStep(3);
-    }, out);
-  };
-  $('#pw3').onsubmit = (e) => {
-    e.preventDefault();
-    busy($('#pw3'), async () => {
-      const a = $('#np').value, b = $('#cp').value;
+      const otp = $('#po').value.trim(), a = $('#np').value, b = $('#cp').value;
+      if (!/^\d{6}$/.test(otp)) throw new Error('Please enter the 6-digit OTP from your email.');
       if (a.length < 8) throw new Error('Password must be at least 8 characters.');
       if (a !== b) throw new Error('Passwords do not match.');
-      await api(CONFIG.EP.resetPassword, { method: 'POST', body: JSON.stringify({ email: pw.email, otp: pw.otp, newPassword: a, resetToken: pw.token }) });
-      ['#np', '#cp', '#po'].forEach((s) => ($(s).value = '')); pw.otp = pw.token = '';
-      pwStep(4);
+      await api(CONFIG.EP.resetPassword, { method: 'POST', body: JSON.stringify({ email: pw.email, otp, newPassword: a }) });
+      ['#np', '#cp', '#po'].forEach((s) => ($(s).value = ''));
+      clearInterval(cd); pwStep(3);
     }, out);
   };
 }
 
 /* ===== AI CHAT ===== */
 function addMsg(text, cls) {
-  const d = document.createElement('div'); d.className = 'm ' + cls; d.textContent = text; // textContent: safe
+  const d = document.createElement('div'); d.className = 'm ' + cls; d.textContent = text;
   $('#msgs').appendChild(d); $('#msgs').scrollTop = 1e9; return d;
 }
+const chatHistory = []; // backend accepts [{role:'user'|'model', text}]
 function initChat() {
   $('#cf').onsubmit = async (e) => {
     e.preventDefault();
@@ -181,8 +163,10 @@ function initChat() {
     const w = addMsg('', 'bot'); w.innerHTML = '<span class="dots"><i></i><i></i><i></i></span>';
     $('#cs').disabled = true;
     try {
-      const d = await api(CONFIG.EP.ai, { method: 'POST', body: JSON.stringify({ message: t }) });
-      w.textContent = d.reply || d.message || d.response || 'No reply received.';
+      const d = await api(CONFIG.EP.ai, { method: 'POST', body: JSON.stringify({ message: t, history: chatHistory.slice(-12) }) });
+      const reply = d.message || d.reply || 'No reply received.';
+      w.textContent = reply;
+      chatHistory.push({ role: 'user', text: t }, { role: 'model', text: reply });
     } catch (err) { w.textContent = err.message; w.classList.add('err'); }
     $('#cs').disabled = false; $('#msgs').scrollTop = 1e9; $('#ci').focus();
   };
@@ -193,14 +177,14 @@ authReady.then(() => {
   applyUser();
   $('#burger').onclick = () => setMenu(true);
   $('#prof').onclick = () => (location.hash = '#profile');
-  $('#close').onclick = $('#ov').onclick = () => setMenu(false); // clicking outside closes
+  $('#close').onclick = $('#ov').onclick = () => setMenu(false);
   $('#menu').addEventListener('click', (e) => e.target.closest('a') && setMenu(false));
   addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
   $('#logout').onclick = logout;
   $('#bell').onclick = () => (location.hash = '#notifications');
   $('#allow').onclick = $('#ne').onclick = askPermission;
   $('#deny').onclick = () => ($('#ask').hidden = true);
-  initName(); initPassword(); initChat();
+  initPassword(); initChat();
 
   document.body.classList.remove('gate');
   addEventListener('hashchange', route);
