@@ -1,13 +1,103 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>NGI web | Premium Websites</title><meta name="theme-color" content="#070914">
+<title>Abbas868 | Home</title><meta name="theme-color" content="#070914">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="home.css">
-<script>setTimeout(function(){document.body.classList.remove("gate")},4000)</script>
-</head><body class="gate">
-<div id="hd"></div>
-<main id="app"></main>
-<div id="ft"></div>
+<script>
+/* Protected page: no token -> login. (home.js then verifies the token with the backend) */
+if (!localStorage.getItem('token')) location.replace('login.html');
+</script>
+</head>
+<body class="gate">
+
+<header class="hd">
+  <a class="brand" href="#home"><i></i>Abbas868</a>
+  <div class="acts">
+    <button class="ib" id="bell" aria-label="Notifications">
+      <svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
+      <span class="badge" id="badge" hidden>0</span>
+    </button>
+    <button class="ib" id="burger" aria-label="Open menu" aria-expanded="false"><span class="bg"><i></i><i></i><i></i></span></button>
+    <button class="ib" id="prof" aria-label="Profile"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-4 4-6 8-6s7 2 8 6"/></svg></button>
+  </div>
+</header>
+
+<div class="ov" id="ov"></div>
+<aside class="menu" id="menu" aria-hidden="true">
+  <div class="mh"><b>☰ Menu</b><button class="ib" id="close" aria-label="Close menu">✕</button></div>
+  <p class="hi" id="hi">Welcome</p>
+  <nav>
+    <a href="#profile">👤 Profile</a>
+    <a href="#notifications">🔔 Notifications</a>
+    <a href="shop.html">🛍️ Shop</a>
+    <a href="#ai">🤖 Talk with AI</a>
+    <a href="#video">🎬 Video</a>
+    <a href="https://razorpay.me/@aamirabbas" target="_blank" rel="noopener noreferrer">🆘 Support</a>
+    <a href="#settings">⚙️ Settings</a>
+    <button id="logout">🚪 Logout</button>
+  </nav>
+</aside>
+
+<main>
+  <!-- HOME -->
+  <section class="view wrap" id="v-home">
+    <h1>Welcome<span id="nm"></span> 👋<br><em>What would you like to do?</em></h1>
+    <div class="options">
+      <a class="opt o1" href="shop.html"><span class="ic">🛍️</span><h2>GO TO SHOP</h2><p>Websites, courses and more.</p><span class="go">Go to Shop →</span></a>
+      <a class="opt o2" href="#ai"><span class="ic">🤖</span><h2>TALK WITH AI</h2><p>Ask anything, get instant answers.</p><span class="go">Talk with AI →</span></a>
+      <a class="opt o3" href="#video"><span class="ic">🎬</span><h2>GO TO VIDEO</h2><p>Watch short vertical videos.</p><span class="go">Go to Video →</span></a>
+    </div>
+  </section>
+
+  <!-- AI -->
+  <section class="view wrap" id="v-ai" hidden>
+    <div class="vh"><a class="back" href="#home">← Home</a><h2>🤖 Talk with <em>AI</em></h2></div>
+    <div class="chat">
+      <div class="msgs" id="msgs" aria-live="polite"><div class="m bot">Hi! I am your AI assistant. Ask me anything.</div></div>
+      <form class="cf" id="cf"><input id="ci" placeholder="Type your message…" autocomplete="off" aria-label="Message" maxlength="2000"><button class="btn" id="cs" type="submit">Send</button></form>
+    </div>
+  </section>
+
+  <!-- VIDEO -->
+  <section class="view wrap" id="v-video" hidden>
+    <div class="vh"><a class="back" href="#home">← Home</a><h2>🎬 <em>Videos</em></h2></div>
+    <p class="empty" id="vmsg">Loading videos…</p>
+    <div class="vwrap" id="vwrap" hidden>
+      <div class="vbox" id="vbox">
+        <video id="vp" playsinline preload="metadata"></video>
+        <div class="vctl">
+          <button class="ib" id="vprev" aria-label="Previous video">⏮</button>
+          <button class="ib big" id="vplay" aria-label="Play or pause">▶</button>
+          <button class="ib" id="vnext" aria-label="Next video">⏭</button>
+          <span class="sp"></span>
+          <button class="ib" id="vmute" aria-label="Mute or unmute">🔊</button>
+          <button class="ib" id="vfs" aria-label="Fullscreen">⛶</button>
+        </div>
+      </div>
+      <div class="vinfo"><h3 id="vt"></h3><p id="vd"></p><div class="creator"><i id="va"></i><span id="vc"></span></div><small id="vn"></small></div>
+    </div>
+  </section>
+
+  <!-- NOTIFICATIONS -->
+  <section class="view wrap" id="v-notifications" hidden>
+    <div class="vh"><a class="back" href="#home">← Home</a><h2>🔔 <em>Notifications</em></h2></div>
+    <div class="ask" id="ask" hidden><p>Allow notifications?</p><div><button class="btn sm" id="allow">Allow</button> <button class="btn ghost sm" id="deny">Not now</button></div></div>
+    <div class="list" id="nl"><p class="empty">Loading…</p></div>
+  </section>
+
+  <!-- PROFILE -->
+  <section class="view wrap" id="v-profile" hidden>
+    <div class="vh"><a class="back" href="#home">← Home</a><h2>👤 <em>Profile</em></h2></div>
+    <div class="fc" id="pf"></div>
+  </section>
+
+  <!-- SETTINGS -->
+  <section class="view wrap" id="v-settings" hidden>
+    <div class="vh"><a class="back" href="#home">← Home</a><h2>⚙️ <em>Settings</em></h2></div>
+    <div class="fc"><h3>Browser notifications</h3><p id="ns">Checking…</p><button class="btn sm" id="ne" style="margin-top:14px" hidden>Enable notifications</button></div>
+  </section>
+</main>
+
 <script src="home.js"></script>
 </body></html>
