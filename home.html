@@ -5,7 +5,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="home.css">
 <script>
-/* Protected page: no token -> login. (api.js then verifies the token with the backend) */
 if (!localStorage.getItem('token')) location.replace('login.html');
 </script>
 </head>
@@ -37,7 +36,6 @@ if (!localStorage.getItem('token')) location.replace('login.html');
 </aside>
 
 <main>
-  <!-- HOME: Shop / AI / Video live ONLY here -->
   <section class="view wrap" id="v-home">
     <h1>Welcome<span id="nm"></span> 👋<br><em>What would you like to do?</em></h1>
     <div class="options">
@@ -47,7 +45,6 @@ if (!localStorage.getItem('token')) location.replace('login.html');
     </div>
   </section>
 
-  <!-- AI -->
   <section class="view wrap" id="v-ai" hidden>
     <div class="vh"><a class="back" href="#home">← Home</a><h2>🤖 Talk with <em>AI</em></h2></div>
     <div class="chat">
@@ -56,36 +53,24 @@ if (!localStorage.getItem('token')) location.replace('login.html');
     </div>
   </section>
 
-  <!-- NOTIFICATIONS -->
   <section class="view wrap" id="v-notifications" hidden>
     <div class="vh"><a class="back" href="#home">← Home</a><h2>🔔 <em>Notifications</em></h2></div>
     <div class="ask" id="ask" hidden><p>Allow notifications?</p><div><button class="btn sm" id="allow">Allow</button> <button class="btn ghost sm" id="deny">Not now</button></div></div>
     <div class="list" id="nl"><p class="empty">Loading…</p></div>
   </section>
 
-  <!-- PROFILE -->
   <section class="view wrap" id="v-profile" hidden>
     <div class="vh"><a class="back" href="#home">← Home</a><h2>👤 <em>Profile</em></h2></div>
     <div class="fc" id="pf"></div>
   </section>
 
-  <!-- SETTINGS -->
   <section class="view wrap" id="v-settings" hidden>
     <div class="vh"><a class="back" href="#home">← Home</a><h2>⚙️ <em>Settings</em></h2></div>
     <div class="sgrid">
 
-      <form class="fc" id="nf">
-        <h3>Change name</h3>
-        <div class="frm">
-          <input class="in" id="newName" maxlength="40" autocomplete="name" placeholder="Your name" aria-label="New name" required>
-          <button class="btn" type="submit">Save name</button>
-          <small class="msg" id="nmsg"></small>
-        </div>
-      </form>
-
       <div class="fc" id="pwc">
         <h3>Change password</h3>
-        <ol class="steps" id="steps"><li>Email</li><li>OTP</li><li>New password</li><li>Done</li></ol>
+        <ol class="steps" id="steps"><li>Email</li><li>OTP &amp; password</li><li>Done</li></ol>
 
         <form class="step frm" data-s="1" id="pw1">
           <label for="pe">Enter your email</label>
@@ -95,19 +80,14 @@ if (!localStorage.getItem('token')) location.replace('login.html');
 
         <form class="step frm" data-s="2" id="pw2" hidden>
           <label for="po">Enter the OTP sent to <b id="pto"></b></label>
-          <input class="in" id="po" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="one-time-code" placeholder="OTP" required>
-          <button class="btn" type="submit">Verify OTP</button>
+          <input class="in" id="po" inputmode="numeric" pattern="[0-9]*" maxlength="6" autocomplete="one-time-code" placeholder="6-digit OTP" required>
+          <input class="in" id="np" type="password" autocomplete="new-password" minlength="8" placeholder="New password (min 8 characters)" aria-label="New password" required>
+          <input class="in" id="cp" type="password" autocomplete="new-password" minlength="8" placeholder="Confirm new password" aria-label="Confirm new password" required>
+          <button class="btn" type="submit">Change password</button>
           <button class="linkbtn" id="rs" type="button">Resend OTP</button>
         </form>
 
-        <form class="step frm" data-s="3" id="pw3" hidden>
-          <label for="np">New password</label>
-          <input class="in" id="np" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required>
-          <input class="in" id="cp" type="password" autocomplete="new-password" minlength="8" placeholder="Confirm new password" aria-label="Confirm new password" required>
-          <button class="btn" type="submit">Change password</button>
-        </form>
-
-        <div class="step done" data-s="4" hidden>
+        <div class="step done" data-s="3" hidden>
           <span class="okic">✅</span>
           <h4>Password changed successfully</h4>
           <p>You can now log in with your new password.</p>
