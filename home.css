@@ -89,4 +89,13 @@ body.open .menu{transform:none}body.open .ov{opacity:1;pointer-events:auto}
 .n.new{border-color:var(--b);background:rgba(34,211,238,.07)}
 .n .ni{font-size:1.5rem}.n h4{font-size:.95rem;margin-bottom:4px}.n p{color:var(--mute);font-size:.86rem;line-height:1.5}.n small{display:block;margin-top:6px;color:var(--mute);font-size:.75rem}
 
+/* settings */
+.sgrid{display:grid;gap:18px;max-width:560px}
+.frm{display:grid;gap:12px;margin-top:14px}.frm label{color:var(--mute);font-size:.88rem}
+.in{width:100%;height:46px;padding:0 16px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.06);color:var(--ink);font:inherit;outline:0}.in:focus{border-color:var(--b);box-shadow:0 0 0 4px rgba(34,211,238,.14)}
+.msg{display:block;min-height:1.2em;margin-top:10px;font-size:.85rem}.msg.good{color:var(--ok)}.msg.bad{color:#fca5a5}
+.linkbtn{border:0;background:none;color:var(--b);font:inherit;font-size:.85rem;cursor:pointer;padding:6px;justify-self:start}.linkbtn:disabled{color:var(--mute);cursor:default}
+.steps{display:flex;gap:6px;list-style:none;padding:0;margin:14px 0 4px;font-size:.7rem;color:var(--mute)}
+.steps li{flex:1;padding-top:8px;border-top:3px solid var(--line);transition:border-color .3s,color .3s}.steps li.on{border-color:var(--b);color:var(--ink)}
+.done{text-align:center;display:grid;gap:10px;justify-items:center;padding:14px 0}.okic{font-size:3rem;animation:pop .4s both}.done h4{font-size:1.1rem}.done p{margin-bottom:6px}
 @media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
