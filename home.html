@@ -1,18 +1,18 @@
 <!DOCTYPE html>
 <html lang="en"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Abbas868 | Home</title><meta name="theme-color" content="#070914">
+<title>Nexora | Home</title><meta name="theme-color" content="#070914">
 <link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="home.css">
 <script>
-/* Protected page: no token -> login. (home.js then verifies the token with the backend) */
+/* Protected page: no token -> login. (api.js then verifies the token with the backend) */
 if (!localStorage.getItem('token')) location.replace('login.html');
 </script>
 </head>
 <body class="gate">
 
 <header class="hd">
-  <a class="brand" href="#home"><i></i>Abbas868</a>
+  <a class="brand" href="#home"><i></i>Nexora</a>
   <div class="acts">
     <button class="ib" id="bell" aria-label="Notifications">
       <svg viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0c0 6 2 7 2 7H4s2-1 2-7"/><path d="M10 20a2 2 0 0 0 4 0"/></svg>
@@ -30,9 +30,6 @@ if (!localStorage.getItem('token')) location.replace('login.html');
   <nav>
     <a href="#profile">👤 Profile</a>
     <a href="#notifications">🔔 Notifications</a>
-    <a href="shop.html">🛍️ Shop</a>
-    <a href="#ai">🤖 Talk with AI</a>
-    <a href="#video">🎬 Video</a>
     <a href="https://razorpay.me/@aamirabbas" target="_blank" rel="noopener noreferrer">🆘 Support</a>
     <a href="#settings">⚙️ Settings</a>
     <button id="logout">🚪 Logout</button>
@@ -40,13 +37,13 @@ if (!localStorage.getItem('token')) location.replace('login.html');
 </aside>
 
 <main>
-  <!-- HOME -->
+  <!-- HOME: Shop / AI / Video live ONLY here -->
   <section class="view wrap" id="v-home">
     <h1>Welcome<span id="nm"></span> 👋<br><em>What would you like to do?</em></h1>
     <div class="options">
       <a class="opt o1" href="shop.html"><span class="ic">🛍️</span><h2>GO TO SHOP</h2><p>Websites, courses and more.</p><span class="go">Go to Shop →</span></a>
       <a class="opt o2" href="#ai"><span class="ic">🤖</span><h2>TALK WITH AI</h2><p>Ask anything, get instant answers.</p><span class="go">Talk with AI →</span></a>
-      <a class="opt o3" href="#video"><span class="ic">🎬</span><h2>GO TO VIDEO</h2><p>Watch short vertical videos.</p><span class="go">Go to Video →</span></a>
+      <a class="opt o3" href="video.html"><span class="ic">🎬</span><h2>GO TO VIDEO</h2><p>Watch short vertical videos.</p><span class="go">Go to Video →</span></a>
     </div>
   </section>
 
@@ -56,26 +53,6 @@ if (!localStorage.getItem('token')) location.replace('login.html');
     <div class="chat">
       <div class="msgs" id="msgs" aria-live="polite"><div class="m bot">Hi! I am your AI assistant. Ask me anything.</div></div>
       <form class="cf" id="cf"><input id="ci" placeholder="Type your message…" autocomplete="off" aria-label="Message" maxlength="2000"><button class="btn" id="cs" type="submit">Send</button></form>
-    </div>
-  </section>
-
-  <!-- VIDEO -->
-  <section class="view wrap" id="v-video" hidden>
-    <div class="vh"><a class="back" href="#home">← Home</a><h2>🎬 <em>Videos</em></h2></div>
-    <p class="empty" id="vmsg">Loading videos…</p>
-    <div class="vwrap" id="vwrap" hidden>
-      <div class="vbox" id="vbox">
-        <video id="vp" playsinline preload="metadata"></video>
-        <div class="vctl">
-          <button class="ib" id="vprev" aria-label="Previous video">⏮</button>
-          <button class="ib big" id="vplay" aria-label="Play or pause">▶</button>
-          <button class="ib" id="vnext" aria-label="Next video">⏭</button>
-          <span class="sp"></span>
-          <button class="ib" id="vmute" aria-label="Mute or unmute">🔊</button>
-          <button class="ib" id="vfs" aria-label="Fullscreen">⛶</button>
-        </div>
-      </div>
-      <div class="vinfo"><h3 id="vt"></h3><p id="vd"></p><div class="creator"><i id="va"></i><span id="vc"></span></div><small id="vn"></small></div>
     </div>
   </section>
 
@@ -95,9 +72,56 @@ if (!localStorage.getItem('token')) location.replace('login.html');
   <!-- SETTINGS -->
   <section class="view wrap" id="v-settings" hidden>
     <div class="vh"><a class="back" href="#home">← Home</a><h2>⚙️ <em>Settings</em></h2></div>
-    <div class="fc"><h3>Browser notifications</h3><p id="ns">Checking…</p><button class="btn sm" id="ne" style="margin-top:14px" hidden>Enable notifications</button></div>
+    <div class="sgrid">
+
+      <form class="fc" id="nf">
+        <h3>Change name</h3>
+        <div class="frm">
+          <input class="in" id="newName" maxlength="40" autocomplete="name" placeholder="Your name" aria-label="New name" required>
+          <button class="btn" type="submit">Save name</button>
+          <small class="msg" id="nmsg"></small>
+        </div>
+      </form>
+
+      <div class="fc" id="pwc">
+        <h3>Change password</h3>
+        <ol class="steps" id="steps"><li>Email</li><li>OTP</li><li>New password</li><li>Done</li></ol>
+
+        <form class="step frm" data-s="1" id="pw1">
+          <label for="pe">Enter your email</label>
+          <input class="in" id="pe" type="email" autocomplete="email" placeholder="you@example.com" required>
+          <button class="btn" type="submit">Send OTP</button>
+        </form>
+
+        <form class="step frm" data-s="2" id="pw2" hidden>
+          <label for="po">Enter the OTP sent to <b id="pto"></b></label>
+          <input class="in" id="po" inputmode="numeric" pattern="[0-9]*" maxlength="8" autocomplete="one-time-code" placeholder="OTP" required>
+          <button class="btn" type="submit">Verify OTP</button>
+          <button class="linkbtn" id="rs" type="button">Resend OTP</button>
+        </form>
+
+        <form class="step frm" data-s="3" id="pw3" hidden>
+          <label for="np">New password</label>
+          <input class="in" id="np" type="password" autocomplete="new-password" minlength="8" placeholder="At least 8 characters" required>
+          <input class="in" id="cp" type="password" autocomplete="new-password" minlength="8" placeholder="Confirm new password" aria-label="Confirm new password" required>
+          <button class="btn" type="submit">Change password</button>
+        </form>
+
+        <div class="step done" data-s="4" hidden>
+          <span class="okic">✅</span>
+          <h4>Password changed successfully</h4>
+          <p>You can now log in with your new password.</p>
+          <a class="btn" href="#home">Back to Home</a>
+        </div>
+
+        <small class="msg" id="pwm"></small>
+      </div>
+
+      <div class="fc"><h3>Browser notifications</h3><p id="ns">Checking…</p><button class="btn sm" id="ne" style="margin-top:14px" hidden>Enable notifications</button></div>
+    </div>
   </section>
 </main>
 
+<script src="api.js"></script>
 <script src="home.js"></script>
 </body></html>
