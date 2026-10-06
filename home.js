@@ -1,50 +1,6 @@
-/* ===== CONFIG: backend URL and endpoints live here, in ONE place ===== */
-const CONFIG = {
-  API: 'https://backend-production-d71ae.up.railway.app',
-  LOGIN: 'login.html',
-  EP: {
-    me: '/api/auth/me',              // existing
-    notifications: '/api/notifications', // GET -> { notifications: [{ id, type, title, message, createdAt }] }
-    ai: '/api/ai/chat',              // POST { message } -> { reply }
-    videos: '/api/videos',           // GET -> { videos: [{ id, url, title, description, creator }] }
-  },
-  POLL_MS: 30000,
-};
 
-/* ===== HELPERS + AUTH ===== */
-const $ = (s, r = document) => r.querySelector(s);
-const esc = (s) => String(s ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
-const tok = () => localStorage.getItem('token');
 let pollTimer = null;
-
-function logout() { // clear ONLY auth data, then replace history entry so Back can't return
-  localStorage.removeItem('token');
-  localStorage.removeItem('user');
-  clearInterval(pollTimer);
-  location.replace(CONFIG.LOGIN);
-}
-async function api(path, opt = {}) {
-  const r = await fetch(CONFIG.API + path, { ...opt, headers: { 'Content-Type': 'application/json', Authorization: 'Bearer ' + tok() } });
-  const d = await r.json().catch(() => ({}));
-  if (r.status === 401) { logout(); throw new Error('Session expired.'); }
-  if (!r.ok || d.success === false) throw new Error(d.message || 'Something went wrong. Please try again.');
-  return d;
-}
-const getUser = () => { try { return JSON.parse(localStorage.getItem('user')) || {}; } catch { return {}; } };
-
-/* Guard: the backend decides, not localStorage */
-(async function guard() {
-  if (!tok()) return logout();
-  try {
-    const r = await fetch(CONFIG.API + CONFIG.EP.me, { headers: { Authorization: 'Bearer ' + tok() } });
-    if (r.status === 401 || r.status === 403) return logout();
-    const d = r.ok ? await r.json().catch(() => ({})) : {};
-    if (d.user) localStorage.setItem('user', JSON.stringify(d.user));
-  } catch { /* offline: allow, API calls will fail on their own */ }
-  boot();
-})();
-// Back/forward cache after logout: re-check the token
-addEventListener('pageshow', (e) => { if (e.persisted && !tok()) logout(); });
+logoutHooks.push(() => clearInterval(pollTimer));
 
 /* ===== MENU ===== */
 function setMenu(o) {
@@ -54,13 +10,11 @@ function setMenu(o) {
 }
 
 /* ===== VIEWS (hash router) ===== */
-const VIEWS = ['home', 'ai', 'video', 'notifications', 'profile', 'settings'];
+const VIEWS = ['home', 'ai', 'notifications', 'profile', 'settings'];
 function route() {
   const name = VIEWS.includes(location.hash.slice(1)) ? location.hash.slice(1) : 'home';
   VIEWS.forEach((v) => ($('#v-' + v).hidden = v !== name));
   setMenu(false);
-  if (name !== 'video') $('#vp').pause();
-  if (name === 'video') openVideos();
   if (name === 'notifications') openNotes();
   if (name === 'profile') renderProfile();
   if (name === 'settings') renderSettings();
@@ -68,7 +22,12 @@ function route() {
   scrollTo(0, 0);
 }
 
-/* ===== PROFILE ===== */
+/* ===== USER ===== */
+function applyUser() {
+  const u = getUser();
+  $('#hi').textContent = u.name ? 'Hi, ' + u.name : 'Welcome';
+  $('#nm').textContent = u.name ? ', ' + u.name.split(' ')[0] : '';
+}
 function renderProfile() {
   const u = getUser();
   $('#pf').innerHTML = `<h3>${esc(u.name || 'User')}</h3><p>${esc(u.email || '')}</p>`;
@@ -83,9 +42,9 @@ function updateBadge() {
   const c = notes.filter((n) => !seen.has(nid(n))).length;
   $('#badge').hidden = !c; $('#badge').textContent = c > 9 ? '9+' : c;
 }
-function popup(n) { // browser notification, only if user allowed it
+function popup(n) { // browser notification, only if the user allowed it
   if (canNotify() && Notification.permission === 'granted') {
-    try { new Notification(n.title || 'Abbas868', { body: n.message || n.body || '' }); } catch { /* ignore */ }
+    try { new Notification(n.title || 'Nexora', { body: n.message || n.body || '' }); } catch { /* ignore */ }
   }
 }
 async function loadNotes() {
@@ -118,7 +77,17 @@ async function askPermission() {
 }
 
 /* ===== SETTINGS ===== */
+const say = (el, t, bad) => { el.textContent = t || ''; el.className = 'msg' + (t ? (bad ? ' bad' : ' good') : ''); };
+async function busy(form, fn, out) { // disable the button while a request runs, show errors
+  const b = form.querySelector('button[type=submit]'); b.disabled = true; say(out, '');
+  try { await fn(); } catch (e) { say(out, e.message, true); }
+  b.disabled = false;
+}
+
 function renderSettings() {
+  const u = getUser();
+  $('#newName').value = u.name || ''; say($('#nmsg'), '');
+  pwReset(u.email || '');
   const s = !canNotify() ? 'Your browser does not support notifications.'
     : Notification.permission === 'granted' ? 'Enabled ✓ You will get a browser alert for new notifications.'
     : Notification.permission === 'denied' ? 'Blocked. Allow notifications for this site in your browser settings.'
@@ -127,75 +96,115 @@ function renderSettings() {
   $('#ne').hidden = !(canNotify() && Notification.permission === 'default');
 }
 
+/* change name */
+function initName() {
+  $('#nf').onsubmit = (e) => {
+    e.preventDefault();
+    const name = $('#newName').value.trim();
+    busy($('#nf'), async () => {
+      if (name.length < 2) throw new Error('Please enter at least 2 characters.');
+      await api(CONFIG.EP.changeName, { method: 'POST', body: JSON.stringify({ name }) });
+      localStorage.setItem('user', JSON.stringify({ ...getUser(), name }));
+      applyUser(); say($('#nmsg'), 'Name updated successfully ✓');
+    }, $('#nmsg'));
+  };
+}
+
+/* change password: email -> send OTP -> enter OTP -> new password -> success */
+const pw = { email: '', otp: '', token: '' };
+let cd = null;
+function pwStep(n) {
+  document.querySelectorAll('#pwc .step').forEach((s) => (s.hidden = s.dataset.s != n));
+  document.querySelectorAll('#steps li').forEach((li, i) => li.classList.toggle('on', i < n));
+  say($('#pwm'), '');
+}
+function pwReset(email) {
+  clearInterval(cd); pw.email = pw.otp = pw.token = '';
+  ['#po', '#np', '#cp'].forEach((s) => ($(s).value = ''));
+  $('#pe').value = email; pwStep(1);
+}
+function cooldown() {
+  let s = 30; const b = $('#rs'); b.disabled = true; b.textContent = `Resend in ${s}s`; clearInterval(cd);
+  cd = setInterval(() => {
+    s--; if (s <= 0) { clearInterval(cd); b.disabled = false; b.textContent = 'Resend OTP'; } else b.textContent = `Resend in ${s}s`;
+  }, 1000);
+}
+const sendOtp = (email) => api(CONFIG.EP.sendOtp, { method: 'POST', body: JSON.stringify({ email }) });
+
+function initPassword() {
+  const out = $('#pwm');
+  $('#pw1').onsubmit = (e) => {
+    e.preventDefault();
+    busy($('#pw1'), async () => {
+      const email = $('#pe').value.trim();
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) throw new Error('Please enter a valid email address.');
+      await sendOtp(email);
+      pw.email = email; $('#pto').textContent = email; pwStep(2); cooldown();
+      say(out, 'OTP sent. Check your email.');
+    }, out);
+  };
+  $('#rs').onclick = async () => {
+    try { await sendOtp(pw.email); cooldown(); say(out, 'OTP sent again.'); } catch (e) { say(out, e.message, true); }
+  };
+  $('#pw2').onsubmit = (e) => {
+    e.preventDefault();
+    busy($('#pw2'), async () => {
+      const otp = $('#po').value.trim();
+      if (!/^\d{4,8}$/.test(otp)) throw new Error('Please enter the OTP from your email.');
+      const d = await api(CONFIG.EP.verifyOtp, { method: 'POST', body: JSON.stringify({ email: pw.email, otp }) });
+      pw.otp = otp; pw.token = d.resetToken || ''; clearInterval(cd); pwStep(3);
+    }, out);
+  };
+  $('#pw3').onsubmit = (e) => {
+    e.preventDefault();
+    busy($('#pw3'), async () => {
+      const a = $('#np').value, b = $('#cp').value;
+      if (a.length < 8) throw new Error('Password must be at least 8 characters.');
+      if (a !== b) throw new Error('Passwords do not match.');
+      await api(CONFIG.EP.resetPassword, { method: 'POST', body: JSON.stringify({ email: pw.email, otp: pw.otp, newPassword: a, resetToken: pw.token }) });
+      ['#np', '#cp', '#po'].forEach((s) => ($(s).value = '')); pw.otp = pw.token = '';
+      pwStep(4);
+    }, out);
+  };
+}
+
 /* ===== AI CHAT ===== */
 function addMsg(text, cls) {
   const d = document.createElement('div'); d.className = 'm ' + cls; d.textContent = text; // textContent: safe
   $('#msgs').appendChild(d); $('#msgs').scrollTop = 1e9; return d;
 }
-$('#cf').onsubmit = async (e) => {
-  e.preventDefault();
-  const t = $('#ci').value.trim(); if (!t) return;
-  $('#ci').value = ''; addMsg(t, 'me');
-  const w = addMsg('', 'bot'); w.innerHTML = '<span class="dots"><i></i><i></i><i></i></span>';
-  $('#cs').disabled = true;
-  try {
-    const d = await api(CONFIG.EP.ai, { method: 'POST', body: JSON.stringify({ message: t }) });
-    w.textContent = d.reply || d.message || d.response || 'No reply received.';
-  } catch (err) { w.textContent = err.message; w.classList.add('err'); }
-  $('#cs').disabled = false; $('#msgs').scrollTop = 1e9; $('#ci').focus();
-};
-
-/* ===== VIDEO ===== */
-let vids = [], vi = 0, loaded = false;
-const vp = () => $('#vp');
-async function openVideos() {
-  if (loaded) return;
-  try {
-    const d = await api(CONFIG.EP.videos); vids = d.videos || []; loaded = true;
-    if (!vids.length) { $('#vmsg').textContent = 'No videos yet.'; return; }
-    $('#vmsg').hidden = true; $('#vwrap').hidden = false; showVideo(0);
-  } catch (e) { $('#vmsg').textContent = e.message; }
+function initChat() {
+  $('#cf').onsubmit = async (e) => {
+    e.preventDefault();
+    const t = $('#ci').value.trim(); if (!t) return;
+    $('#ci').value = ''; addMsg(t, 'me');
+    const w = addMsg('', 'bot'); w.innerHTML = '<span class="dots"><i></i><i></i><i></i></span>';
+    $('#cs').disabled = true;
+    try {
+      const d = await api(CONFIG.EP.ai, { method: 'POST', body: JSON.stringify({ message: t }) });
+      w.textContent = d.reply || d.message || d.response || 'No reply received.';
+    } catch (err) { w.textContent = err.message; w.classList.add('err'); }
+    $('#cs').disabled = false; $('#msgs').scrollTop = 1e9; $('#ci').focus();
+  };
 }
-function showVideo(i) {
-  vi = (i + vids.length) % vids.length;
-  const v = vids[vi], el = vp();
-  el.src = v.url; el.load();
-  $('#vt').textContent = v.title || ''; $('#vd').textContent = v.description || '';
-  const c = typeof v.creator === 'object' ? (v.creator?.name || '') : (v.creator || '');
-  $('#vc').textContent = c || 'Unknown creator'; $('#va').textContent = (c || '?')[0].toUpperCase();
-  $('#vn').textContent = `Video ${vi + 1} of ${vids.length}`;
-  el.play().catch(() => syncPlay());
-}
-const syncPlay = () => { $('#vplay').textContent = vp().paused ? '▶' : '⏸'; $('#vmute').textContent = vp().muted ? '🔇' : '🔊'; };
-function togglePlay() { const el = vp(); el.paused ? el.play().catch(() => {}) : el.pause(); }
 
 /* ===== BOOT ===== */
-function boot() {
-  const u = getUser();
-  $('#hi').textContent = u.name ? 'Hi, ' + u.name : 'Welcome';
-  if (u.name) $('#nm').textContent = ', ' + u.name.split(' ')[0];
-
-  $('#burger').onclick = $('#prof').onclick = () => (location.hash === '#profile' ? route() : (setMenu(true)));
-  $('#close').onclick = $('#ov').onclick = () => setMenu(false); // closes when clicking outside
+authReady.then(() => {
+  applyUser();
+  $('#burger').onclick = () => setMenu(true);
+  $('#prof').onclick = () => (location.hash = '#profile');
+  $('#close').onclick = $('#ov').onclick = () => setMenu(false); // clicking outside closes
   $('#menu').addEventListener('click', (e) => e.target.closest('a') && setMenu(false));
   addEventListener('keydown', (e) => { if (e.key === 'Escape') setMenu(false); });
   $('#logout').onclick = logout;
   $('#bell').onclick = () => (location.hash = '#notifications');
   $('#allow').onclick = $('#ne').onclick = askPermission;
   $('#deny').onclick = () => ($('#ask').hidden = true);
-
-  const el = vp();
-  el.onclick = $('#vplay').onclick = togglePlay;
-  el.onplay = el.onpause = el.onvolumechange = syncPlay;
-  el.onended = () => showVideo(vi + 1);
-  $('#vnext').onclick = () => showVideo(vi + 1);
-  $('#vprev').onclick = () => showVideo(vi - 1);
-  $('#vmute').onclick = () => { el.muted = !el.muted; };
-  $('#vfs').onclick = () => (document.fullscreenElement ? document.exitFullscreen() : $('#vbox').requestFullscreen?.());
+  initName(); initPassword(); initChat();
 
   document.body.classList.remove('gate');
   addEventListener('hashchange', route);
   route();
   loadNotes();
   pollTimer = setInterval(loadNotes, CONFIG.POLL_MS);
-}
+});
